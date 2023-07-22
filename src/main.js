@@ -1,5 +1,6 @@
 import './assets/base.css';
 import './assets/main.css';
+import 'nprogress/nprogress.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -11,6 +12,9 @@ import router from './router';
 import Icon from './directives/icon';
 import i189 from './includes/i189';
 import GlobalComponents from './includes/_globals';
+import progressBar from './includes/progress-bar';
+
+progressBar(router);
 
 let app;
 auth.onAuthStateChanged(() => {
@@ -22,6 +26,7 @@ auth.onAuthStateChanged(() => {
     app.use(VeeValidatePlugin);
     app.use(i189);
     app.use(GlobalComponents);
+
     app.directive('icon', Icon);
     app.mount('#app');
   }

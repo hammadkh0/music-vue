@@ -1,7 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
-import ManageView from '../views/ManageView.vue';
-import SongView from '../views/SongView.vue';
 import useUserStore from '../stores/user';
 
 const router = createRouter({
@@ -10,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: () => import('../views/HomeView.vue'),
     },
     {
       path: '/about',
@@ -24,7 +21,7 @@ const router = createRouter({
       path: '/manage-music',
       name: 'manage',
       // alias: '/manage', /*Allow component to re-render without redirecting */
-      component: ManageView,
+      component: () => import('../views/ManageView.vue'),
       beforeEnter: (to, from, next) => {
         console.log('manage guard');
         next();
@@ -41,7 +38,7 @@ const router = createRouter({
     {
       path: '/song/:songID',
       name: 'song',
-      component: SongView,
+      component: () => import('../views/SongView.vue'),
     },
     {
       path: '/:catchAll(.*)*',
