@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 export default {
   install(app) {
     const baseComponents = import.meta.glob('../components/base/*.vue', {
@@ -9,8 +10,8 @@ export default {
        * remove the .vue extension from name, then camelCase it and then capitalize the first letter to convert into Pascal Case
        */
       // eslint-disable-next-line no-useless-escape
-      const componentName = _.upperFirst(
-        _.camelCase(
+      const componentName = upperFirst(
+        camelCase(
           path
             .split('/')
             .pop()

@@ -27,3 +27,5 @@ coverage
 *.sln
 *.sw?
 template
+stats.html
+.vercel
