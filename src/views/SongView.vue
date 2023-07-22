@@ -132,19 +132,34 @@ export default {
       });
     },
   },
-  async created() {
-    const snapshot = await songsCollection.doc(this.$route.params.songID).get();
-    if (!snapshot.exists) {
-      this.$router.push({ name: 'home' });
-      return;
-    }
+  async beforeRouteEnter(to, from, next) {
+    /**
+     * THERE IS NO ".this" IN ROUTE HOOKS
+     * We are using beforeRouteEnter instead of created because
+     
+     * => created hook is called when the component has been created inside the DOM so the template is rendered and we are waiting for data. So this appears like app is loading very slow.
+     
+     * => beforeRouteEnter can be used as it will be called when the route is about to hit this component. Thus there is no component created yet and we can load the data from db etc.
+     */
+    const snapshot = await songsCollection.doc(to.params.songID).get();
 
-    // getting the sort value from the request query param. If sort doesn't exist, then it will be '1'
-    const { sort } = this.$route.query;
-    this.sort = sort === '1' || sort === '2' ? sort : '1';
+    /**
+     * next has paramter that will be called when component has been loaded
+     * vm is a context to the component. we can use this just like "this" keyword.
+     */
+    next((vm) => {
+      if (!snapshot.exists) {
+        this.$router.push({ name: 'home' });
+        return;
+      }
 
-    this.song = snapshot.data();
-    this.getComments();
+      // getting the sort value from the request query param. If sort doesn't exist, then it will be '1'
+      const { sort } = vm.$route.query;
+      vm.sort = sort === '1' || sort === '2' ? sort : '1';
+
+      vm.song = snapshot.data();
+      vm.getComments();
+    });
   },
   methods: {
     async addComment(values, { resetForm }) {
